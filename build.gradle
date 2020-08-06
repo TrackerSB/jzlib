@@ -1,0 +1,88 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+group 'bayern.steinbrecher'
+version '1.1.4-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+plugins.withType(JavaPlugin).configureEach {
+    java {
+        modularity.inferModulePath = true
+        withSourcesJar()
+        withJavadocJar()
+    }
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "OSSRH"
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = "${ossrhUsername}"
+                password = "${ossrhPassword}"
+            }
+        }
+    }
+    publications {
+        library(MavenPublication) {
+            pom {
+                name = 'JZlib'
+                description = 'JZlib is a re-implementation of zlib in pure Java'
+                url = 'http://www.jcraft.com/'
+                licenses {
+                    license {
+                        name = 'Revised BSD'
+                        url = 'http://www.jcraft.com/jzlib/LICENSE.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'ymnk'
+                        name = 'Atsuhiko Yamanaka'
+                        email = 'ymnk@jcraft.com'
+                    }
+                    developer {
+                        id = 'stefanHuber'
+                        name = 'Stefan Huber'
+                        email = 'stefan.huber.niedling@outlook.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/TrackerSB/jzlib.git'
+                    developerConnection = 'scm:git:ssh://github.com/TrackerSB/jzlib.git'
+                    url = 'https://github.com/TrackerSB/jzlib'
+                }
+            }
+            from components.java
+        }
+    }
+}
+
+signing {
+    useGpgCmd()
+    sign publishing.publications.library
+}
