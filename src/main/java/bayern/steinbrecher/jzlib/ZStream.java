@@ -8,8 +8,8 @@ modification, are permitted provided that the following conditions are met:
   1. Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
 
-  2. Redistributions in binary form must reproduce the above copyright 
-     notice, this list of conditions and the following disclaimer in 
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in
      the documentation and/or other materials provided with the distribution.
 
   3. The names of the authors may not be used to endorse or promote products
@@ -32,7 +32,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * and contributors of zlib.
  */
 
-package com.jcraft.jzlib;
+package bayern.steinbrecher.jzlib;
 
 /**
  * ZStream
@@ -75,8 +75,8 @@ public class ZStream{
 
   public String msg;
 
-  Deflate dstate; 
-  Inflate istate; 
+  Deflate dstate;
+  Inflate istate;
 
   int data_type; // best guess about the data type: ascii or binary
 
@@ -272,7 +272,7 @@ public class ZStream{
   }
 
   public void setOutput(byte[] buf){
-    setOutput(buf, 0, buf.length); 
+    setOutput(buf, 0, buf.length);
   }
 
   public void setOutput(byte[] buf, int off, int len){
@@ -282,17 +282,17 @@ public class ZStream{
   }
 
   public void setInput(byte[] buf){
-    setInput(buf, 0, buf.length, false); 
+    setInput(buf, 0, buf.length, false);
   }
 
   public void setInput(byte[] buf, boolean append){
-    setInput(buf, 0, buf.length, append); 
+    setInput(buf, 0, buf.length, append);
   }
 
   public void setInput(byte[] buf, int off, int len, boolean append){
     if(len<=0 && append && next_in!=null) return;
 
-    if(avail_in>0 && append){  
+    if(avail_in>0 && append){
       byte[] tmp = new byte[avail_in+len];
       System.arraycopy(next_in, next_in_index, tmp, 0, avail_in);
       System.arraycopy(buf, off, tmp, avail_in, len);
@@ -371,7 +371,7 @@ public class ZStream{
   /**
    * Those methods are expected to be override by Inflater and Deflater.
    * In the future, they will become abstract methods.
-   */ 
+   */
   public int end(){ return Z_OK; }
   public boolean finished(){ return false; }
 }

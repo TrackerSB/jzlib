@@ -1,6 +1,6 @@
 /* -*-mode:java; c-basic-offset:2; -*- */
 /*
-Copyright (c) 2011 ymnk, JCraft,Inc. All rights reserved.
+Copyright (c) 2000,2001,2002,2003 ymnk, JCraft,Inc. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -8,8 +8,8 @@ modification, are permitted provided that the following conditions are met:
   1. Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
 
-  2. Redistributions in binary form must reproduce the above copyright 
-     notice, this list of conditions and the following disclaimer in 
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in
      the documentation and/or other materials provided with the distribution.
 
   3. The names of the authors may not be used to endorse or promote products
@@ -32,12 +32,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * and contributors of zlib.
  */
 
-package com.jcraft.jzlib;
+package bayern.steinbrecher.jzlib;
 
-interface Checksum {
-  void update(byte[] buf, int index, int len);
-  void reset();
-  void reset(long init);
-  long getValue();
-  Checksum copy();
+public class ZStreamException extends java.io.IOException {
+  public ZStreamException() {
+    super();
+  }
+  public ZStreamException(String s) {
+    super(s);
+  }
 }

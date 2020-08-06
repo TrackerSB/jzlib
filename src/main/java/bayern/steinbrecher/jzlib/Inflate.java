@@ -8,8 +8,8 @@ modification, are permitted provided that the following conditions are met:
   1. Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
 
-  2. Redistributions in binary form must reproduce the above copyright 
-     notice, this list of conditions and the following disclaimer in 
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in
      the documentation and/or other materials provided with the distribution.
 
   3. The names of the authors may not be used to endorse or promote products
@@ -32,10 +32,10 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * and contributors of zlib.
  */
 
-package com.jcraft.jzlib;
+package bayern.steinbrecher.jzlib;
 
 final class Inflate{
-  
+
   static final private int MAX_WBITS=15; // 32K LZ77 window
 
   // preset dictionary flag in zlib header
@@ -112,7 +112,7 @@ final class Inflate{
 
   private final ZStream z;
 
-  private int flags; 
+  private int flags;
 
   private int need_bytes = -1;
   private byte[] crcbuf=new byte[4];
@@ -121,7 +121,7 @@ final class Inflate{
 
   int inflateReset(){
     if(z == null) return Z_STREAM_ERROR;
-    
+
     z.total_in = z.total_out = 0;
     z.msg = null;
     this.mode = HEAD;
@@ -194,7 +194,7 @@ final class Inflate{
 
     if(z == null || z.next_in == null){
       if(f == Z_FINISH && this.mode==HEAD)
-        return Z_OK; 
+        return Z_OK;
       return Z_STREAM_ERROR;
     }
 
@@ -207,7 +207,7 @@ final class Inflate{
         if(wrap==0){
 	  this.mode = BLOCKS;
           break;
-        } 
+        }
 
         try { r=readBytes(2, r, f); }
         catch(Return e){ return e.r; }
@@ -220,7 +220,7 @@ final class Inflate{
 	  z.adler=new CRC32();
           checksum(2, this.need);
 
-          if(gheader==null) 
+          if(gheader==null)
             gheader=new GZIPHeader();
 
           this.mode = FLAGS;
@@ -248,7 +248,7 @@ final class Inflate{
             wrap = 0;
             this.mode = BLOCKS;
             break;
-          }  
+          }
           this.mode = BAD;
           z.msg = "incorrect header check";
           // since zlib 1.2, it is allowted to inflateSync for this case.
@@ -267,10 +267,10 @@ final class Inflate{
 	  */
           break;
         }
-  
+
         if(wrap == 4){
           wrap = 1;
-        }  
+        }
 
         if((this.method>>4)+8>this.wbits){
           this.mode = BAD;
@@ -374,9 +374,9 @@ final class Inflate{
         this.need+=(z.next_in[z.next_in_index++]&0xffL);
 
         if(flags!=0){  // gzip
-          this.need = ((this.need&0xff000000)>>24 | 
-                          (this.need&0x00ff0000)>>8 | 
-                          (this.need&0x0000ff00)<<8 | 
+          this.need = ((this.need&0xff000000)>>24 |
+                          (this.need&0x00ff0000)>>8 |
+                          (this.need&0x0000ff00)<<8 |
                           (this.need&0x0000ffff)<<24)&0xffffffffL;
         }
 
@@ -390,7 +390,7 @@ final class Inflate{
 	  */
         }
         else if(flags!=0 && gheader!=null){
-          gheader.crc = this.need; 
+          gheader.crc = this.need;
         }
 
         this.mode = LENGTH;
@@ -436,18 +436,18 @@ final class Inflate{
 
         if ((flags & 0xff) != Z_DEFLATED) {
           z.msg = "unknown compression method";
-          this.mode = BAD; 
+          this.mode = BAD;
           break;
         }
         if ((flags & 0xe000)!=0) {
           z.msg = "unknown header flags set";
-          this.mode = BAD; 
+          this.mode = BAD;
           break;
         }
 
         if ((flags & 0x0200)!=0){
           checksum(2, this.need);
-        } 
+        }
 
         this.mode = TIME;
 
@@ -489,7 +489,7 @@ final class Inflate{
 
       case EXTRA:
         if ((flags & 0x0400)!=0) {
-          try { 
+          try {
             r=readBytes(r, f);
             if(gheader!=null){
               byte[] foo = tmp_string.toByteArray();
@@ -499,7 +499,7 @@ final class Inflate{
 	      }
               else{
                 z.msg = "bad extra field length";
-                this.mode = BAD; 
+                this.mode = BAD;
                 break;
 	      }
             }
@@ -512,7 +512,7 @@ final class Inflate{
 	this.mode = NAME;
       case NAME:
 	if ((flags & 0x0800)!=0) {
-          try { 
+          try {
             r=readString(r, f);
             if(gheader!=null){
               gheader.name=tmp_string.toByteArray();
@@ -527,7 +527,7 @@ final class Inflate{
         this.mode = COMMENT;
       case COMMENT:
         if ((flags & 0x1000)!=0) {
-          try { 
+          try {
             r=readString(r, f);
             if(gheader!=null){
               gheader.comment=tmp_string.toByteArray();
@@ -664,7 +664,7 @@ final class Inflate{
     while(need_bytes>0){
       if(z.avail_in==0){ throw new Return(r); }; r=f;
       z.avail_in--; z.total_in++;
-      this.need = this.need | 
+      this.need = this.need |
 	((z.next_in[z.next_in_index++]&0xff)<<((n-need_bytes)*8));
       need_bytes--;
     }
@@ -687,7 +687,7 @@ final class Inflate{
     if(tmp_string == null){
       tmp_string=new java.io.ByteArrayOutputStream();
     }
-    int b=0; 
+    int b=0;
     do {
       if(z.avail_in==0){ throw new Return(r); }; r=f;
       z.avail_in--; z.total_in++;
@@ -703,7 +703,7 @@ final class Inflate{
     if(tmp_string == null){
       tmp_string=new java.io.ByteArrayOutputStream();
     }
-    int b=0; 
+    int b=0;
     while(this.need>0){
       if(z.avail_in==0){ throw new Return(r); }; r=f;
       z.avail_in--; z.total_in++;
