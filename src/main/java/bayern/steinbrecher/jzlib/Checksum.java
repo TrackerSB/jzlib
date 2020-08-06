@@ -35,9 +35,13 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package bayern.steinbrecher.jzlib;
 
 interface Checksum {
-  void update(byte[] buf, int index, int len);
-  void reset();
-  void reset(long init);
-  long getValue();
-  Checksum copy();
+    void update(byte[] buf, int index, int len);
+
+    void reset();
+
+    void reset(long init);
+
+    long getValue();
+
+    Checksum copy();
 }
